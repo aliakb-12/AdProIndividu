@@ -4,12 +4,6 @@ plugins {
     id("io.spring.dependency-management") version "1.1.7"
 }
 
-
-val seleniumJavaVersion = "4.14.1"
-val seleniumJupiterVersion = "5.0.1"
-val webdrivermanagerVersion = "6.1.0"
-
-
 group = "id.ac.ui.cs.advprog"
 version = "0.0.1-SNAPSHOT"
 description = "eshop"
@@ -18,7 +12,6 @@ val seleniumJavaVersion = "4.14.1"
 val seleniumJupiterVersion = "5.0.1"
 val webdrivermanagerVersion = "5.6.3"
 val junitJupiterVersion = "5.9.1"
-
 
 java {
     toolchain {
@@ -54,7 +47,7 @@ dependencies {
 tasks.withType<Test>().configureEach {
     useJUnitPlatform()
 }
-// Mendaftarkan task untuk Unit Test (mengecualikan FunctionalTest)
+
 tasks.register<Test>("unitTest") {
     description = "Runs unit tests."
     group = "verification"
@@ -64,7 +57,6 @@ tasks.register<Test>("unitTest") {
     }
 }
 
-// Mendaftarkan task untuk Functional Test (hanya menjalankan FunctionalTest)
 tasks.register<Test>("functionalTest") {
     description = "Runs functional tests."
     group = "verification"
@@ -72,9 +64,4 @@ tasks.register<Test>("functionalTest") {
     filter {
         includeTestsMatching("*FunctionalTest")
     }
-}
-
-// Konfigurasi agar semua tes menggunakan JUnit Platform
-tasks.withType<Test>().configureEach {
-    useJUnitPlatform()
 }
