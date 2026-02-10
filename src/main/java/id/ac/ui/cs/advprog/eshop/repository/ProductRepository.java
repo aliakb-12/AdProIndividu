@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.UUID;
 
 @Repository
 public class ProductRepository {
@@ -16,8 +17,9 @@ public class ProductRepository {
         return product;
     }
 
-    public void delete(String productId){
-        productData.removeIf(product -> product.getProductID().equals(productId));
+    public void delete(UUID productId){
+        // Mencari UUID yang sama
+        productData.removeIf(product -> productId.equals(product.getProductID()));
     }
 
     public Iterator<Product> findAll() {
