@@ -17,6 +17,18 @@ public class ProductRepository {
         return product;
     }
 
+    public Product edit(Product product){
+        for(Product productExist : productData){
+            // Mencari UUID yang sama
+            if(productExist.getProductID().equals(product.getProductID())){
+                productExist.setProductName(productExist.getProductName());
+                productExist.setProductQuantity(product.getProductQuantity());
+                return productExist;
+            }
+        }
+        return null;
+    }
+
     public void delete(UUID productId){
         // Mencari UUID yang sama
         productData.removeIf(product -> productId.equals(product.getProductID()));
@@ -25,5 +37,15 @@ public class ProductRepository {
     public Iterator<Product> findAll() {
         return productData.iterator();
     }
+
+    public Product findByID(UUID id){
+        for(Product product : productData){
+            if(product.getProductID().equals(id)){
+                return  product;
+            }
+        }
+        return null;
+    }
+
 
 }

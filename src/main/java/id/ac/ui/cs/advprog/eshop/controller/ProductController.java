@@ -21,6 +21,7 @@ public class ProductController {
     public String createProductPage(Model model) {
         Product product = new Product();
         model.addAttribute("product", product);
+        model.addAttribute("isEdit", false);
         return "createProduct";
     }
 
@@ -28,6 +29,20 @@ public class ProductController {
     public String createProductPost(@ModelAttribute Product product, Model model) {
         service.create(product);
         return "redirect:list";
+    }
+
+    @GetMapping("/edit/{id}")
+    public String editProductPage(@PathVariable UUID id, Model model) {
+        Product product = service.findByID(id);
+        model.addAttribute("product", product);
+        model.addAttribute("isEdit", true);
+        return "createProduct";
+    }
+
+    @PostMapping("/edit")
+    public String editProductPost(@ModelAttribute Product product){
+        service.edit(product);
+        return "redirect:/product/list";
     }
 
     @PostMapping("/delete/{id}")

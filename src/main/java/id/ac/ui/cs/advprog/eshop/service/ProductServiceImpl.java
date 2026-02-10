@@ -30,10 +30,22 @@ public class ProductServiceImpl implements ProductService{
     }
 
     @Override
+    public Product edit(Product product){
+        productRepository.edit(product);
+        return product;
+    }
+
+    @Override
     public List<Product> findAll(){
         Iterator<Product> productIterator = productRepository.findAll();
         List<Product> allProduct = new ArrayList<>();
         productIterator.forEachRemaining(allProduct::add);
         return  allProduct;
+    }
+
+    @Override
+    public Product findByID(UUID id){
+        Product product = productRepository.findByID(id);
+        return  product;
     }
 }
