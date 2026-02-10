@@ -69,4 +69,63 @@ public class ProductRepositoryTest {
 
         assertFalse(productIterator.hasNext());
     }
+
+    @Test
+    void testEditProduct() {
+        Product product = new Product();
+        UUID productId = UUID.randomUUID();
+        product.setProductID(productId);
+        product.setProductName("Sampo Cap Bambang");
+        product.setProductQuantity(100);
+        productRepository.create(product);
+
+        Product updatedProduct = new Product();
+        updatedProduct.setProductID(productId);
+        updatedProduct.setProductName("Sampo Cap Usep");
+        updatedProduct.setProductQuantity(200);
+
+        Product result = productRepository.edit(updatedProduct);
+
+        assertNotNull(result);
+        assertEquals(productId, result.getProductID());
+        assertEquals("Sampo Cap Usep", result.getProductName());
+        assertEquals(200, result.getProductQuantity());
+    }
+
+    @Test
+    void testEditProductNotFound() {
+        UUID nonExistentId = UUID.randomUUID();
+        Product updatedProduct = new Product();
+        updatedProduct.setProductID(nonExistentId);
+        updatedProduct.setProductName("Sampo Cap Usep");
+        updatedProduct.setProductQuantity(200);
+
+        Product result = productRepository.edit(updatedProduct);
+
+        assertNull(result);
+    }
+
+    @Test
+    void testDeleteProduct() {
+        Product product = new Product();
+        UUID productId = UUID.randomUUID();
+        product.setProductID(productId);
+        product.setProductName("Sampo Cap Bambang");
+        product.setProductQuantity(100);
+        productRepository.create(product);
+
+        productRepository.delete(productId);
+
+        Product result = productRepository.findByID(productId);
+        assertNull(result);
+    }
+
+    @Test
+    void testDeleteProductNotFound() {
+        UUID nonExistentId = UUID.randomUUID();
+
+        // Should not throw exception even if product doesn't exist
+        assertDoesNotThrow(() -> productRepository.delete(nonExistentId));
+    }
 }
+
