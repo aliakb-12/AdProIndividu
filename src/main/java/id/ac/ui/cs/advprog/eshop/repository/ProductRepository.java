@@ -20,7 +20,7 @@ public class ProductRepository {
     public Product edit(Product product){
         for(Product productExist : productData){
             if(productExist.getProductID().equals(product.getProductID())){
-                productExist.setProductName(productExist.getProductName());
+                productExist.setProductName(product.getProductName());
                 productExist.setProductQuantity(product.getProductQuantity());
                 return productExist;
             }
