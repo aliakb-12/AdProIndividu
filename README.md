@@ -1,7 +1,7 @@
-title: eshop-individu
-emoji: 🛒
-colorFrom: blue
-colorTo: indigo
+title: Eshop Individu
+emoji: 🦀
+colorFrom: indigo
+colorTo: purple
 sdk: docker
 pinned: false
 
