@@ -26,7 +26,7 @@ jobs:
 
       # 4. Build Docker image
       - name: Build Docker
-        run: docker build -t keya12:latest .
+        run: docker build -t adproindividu:latest .
 
       # 5. Deploy to Fly.io
       - name: Deploy
