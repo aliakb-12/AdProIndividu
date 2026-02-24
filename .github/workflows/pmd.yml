@@ -1,0 +1,25 @@
+name: Static Code Analysis - PMD
+
+on:
+  push:
+    branches:
+      - "**"   # runs on every branch
+
+jobs:
+  pmd:
+    name: Run PMD Analysis
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Java 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: "temurin"
+          java-version: "21"
+          cache: "gradle"
+
+      - name: Run PMD
+        run: ./gradlew pmdMain pmdTest
