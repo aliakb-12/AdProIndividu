@@ -1,4 +1,4 @@
-app = "keya12"        # replace with your Fly.io app name
+app = "adproindividu"        # replace with your Fly.io app name
 primary_region = "sin" # choose a region close to you
 
 [build]
