@@ -105,6 +105,26 @@ public class ProductRepositoryTest {
         assertNull(result);
     }
 
+
+    @Test
+    void testEditProductWithNullExistingId() {
+        Product existing = new Product();
+        existing.setProductID(null);
+        existing.setProductName("Old");
+        existing.setProductQuantity(1);
+
+        productRepository.create(existing);
+
+        Product updated = new Product();
+        updated.setProductID(UUID.randomUUID());
+        updated.setProductName("New");
+        updated.setProductQuantity(2);
+
+        Product result = productRepository.edit(updated);
+
+        assertNull(result);
+    }
+
     @Test
     void testDeleteProduct() {
         Product product = new Product();
@@ -126,6 +146,31 @@ public class ProductRepositoryTest {
 
         // Should not throw exception even if product doesn't exist
         assertDoesNotThrow(() -> productRepository.delete(nonExistentId));
+    }
+
+    @Test
+    void testFindByID_ReturnsProductWhenExists() {
+        Product product = new Product();
+        UUID id = UUID.randomUUID();
+        product.setProductID(id);
+
+        productRepository.create(product);
+
+        Product result = productRepository.findByID(id);
+
+        assertNotNull(result);
+        assertEquals(product, result);
+    }
+
+    @Test
+    void testFindByID_ReturnsNullWhenNotFound() {
+        Product product = new Product();
+        product.setProductID(UUID.randomUUID());
+        productRepository.create(product);
+
+        Product result = productRepository.findByID(UUID.randomUUID());
+
+        assertNull(result);
     }
 }
 

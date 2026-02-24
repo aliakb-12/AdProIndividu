@@ -17,9 +17,11 @@ public class ProductRepository {
         return product;
     }
 
-    public Product edit(Product product){
-        for(Product productExist : productData){
-            if(productExist.getProductID().equals(product.getProductID())){
+    public Product edit(Product product) {
+        for (Product productExist : productData) {
+            if (productExist.getProductID() != null &&
+                    productExist.getProductID().equals(product.getProductID())) {
+
                 productExist.setProductName(product.getProductName());
                 productExist.setProductQuantity(product.getProductQuantity());
                 return productExist;

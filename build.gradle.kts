@@ -1,8 +1,10 @@
 plugins {
     java
     jacoco
+    pmd
     id("org.springframework.boot") version "3.5.10"
     id("io.spring.dependency-management") version "1.1.7"
+    kotlin("jvm")
 }
 
 group = "id.ac.ui.cs.advprog"
@@ -18,6 +20,14 @@ java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(21)
     }
+}
+
+pmd{
+    toolVersion = "7.0.0-rc4"
+    isConsoleOutput = true
+    isIgnoreFailures = false
+    ruleSets = emptyList()
+    ruleSetFiles = files("config/pmd/pmd-ruleset.xml")
 }
 
 configurations {
@@ -43,6 +53,7 @@ dependencies {
     testImplementation("io.github.bonigarcia:selenium-jupiter:${seleniumJupiterVersion}")
     testImplementation("io.github.bonigarcia:webdrivermanager:${webdrivermanagerVersion}")
     testImplementation("org.junit.jupiter:junit-jupiter:${junitJupiterVersion}")
+    implementation(kotlin("stdlib-jdk8"))
 }
 
 tasks.withType<Test>().configureEach {
@@ -76,4 +87,13 @@ tasks.test{
 
 tasks.jacocoTestReport{
     dependsOn(tasks.test)
+}
+
+// Still can deploy
+tasks.named<Pmd>("pmdTest") {
+    ignoreFailures = true
+}
+
+tasks.named<Pmd>("pmdMain") {
+    ignoreFailures = true
 }

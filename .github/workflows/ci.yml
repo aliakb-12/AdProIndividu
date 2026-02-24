@@ -17,5 +17,8 @@ jobs:
           distribution: "temurin"
           java-version: "21"
           cache: "gradle"
+      - uses: pmd/pmd-github-action@v2
+        with:
+          rulesets: 'ruleset.xml'
       - name: Run unit tests
         run: ./gradlew test
