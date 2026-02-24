@@ -33,7 +33,7 @@ class ProductServiceImplTests{
         product.setProductName("Laptop");
         product.setProductQuantity(10);
 
-        Product result = productService.create(product);
+        final Product result = productService.create(product);
 
         assertNotNull(result.getProductID()); // UUID is generated
         verify(productRepository).create(product);
@@ -44,7 +44,7 @@ class ProductServiceImplTests{
        ======================= */
     @Test
     void testDeleteProduct() {
-        UUID id = UUID.randomUUID();
+        final UUID id = UUID.randomUUID();
 
         productService.delete(id);
 
@@ -61,7 +61,7 @@ class ProductServiceImplTests{
 
         when(productRepository.edit(product)).thenReturn(product);
 
-        Product result = productService.edit(product);
+        final Product result = productService.edit(product);
 
         assertEquals(product, result);
         verify(productRepository).edit(product);
@@ -78,7 +78,7 @@ class ProductServiceImplTests{
         Iterator<Product> iterator = List.of(p1, p2).iterator();
         when(productRepository.findAll()).thenReturn(iterator);
 
-        List<Product> products = productService.findAll();
+        final List<Product> products = productService.findAll();
 
         assertEquals(2, products.size());
         assertTrue(products.contains(p1));
@@ -90,13 +90,13 @@ class ProductServiceImplTests{
        ======================= */
     @Test
     void testFindByID() {
-        UUID id = UUID.randomUUID();
+        final UUID id = UUID.randomUUID();
         Product product = new Product();
         product.setProductID(id);
 
         when(productRepository.findByID(id)).thenReturn(product);
 
-        Product result = productService.findByID(id);
+        final Product result = productService.findByID(id);
 
         assertEquals(product, result);
         verify(productRepository).findByID(id);
