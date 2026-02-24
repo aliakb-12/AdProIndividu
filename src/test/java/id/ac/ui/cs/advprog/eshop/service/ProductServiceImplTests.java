@@ -44,11 +44,11 @@ class ProductServiceImplTests{
        ======================= */
     @Test
     void testDeleteProduct() {
-        final UUID id = UUID.randomUUID();
+        final UUID productId = UUID.randomUUID();
 
-        productService.delete(id);
+        productService.delete(productId);
 
-        verify(productRepository).delete(id);
+        verify(productRepository).delete(productId);
     }
 
     /* =======================
@@ -90,15 +90,15 @@ class ProductServiceImplTests{
        ======================= */
     @Test
     void testFindByID() {
-        final UUID id = UUID.randomUUID();
+        final UUID productId = UUID.randomUUID();
         Product product = new Product();
-        product.setProductID(id);
+        product.setProductID(productId);
 
-        when(productRepository.findByID(id)).thenReturn(product);
+        when(productRepository.findByID(productId)).thenReturn(product);
 
-        final Product result = productService.findByID(id);
+        final Product result = productService.findByID(productId);
 
         assertEquals(product, result);
-        verify(productRepository).findByID(id);
+        verify(productRepository).findByID(productId);
     }
 }
