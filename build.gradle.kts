@@ -3,6 +3,7 @@ plugins {
     jacoco
     id("org.springframework.boot") version "3.5.10"
     id("io.spring.dependency-management") version "1.1.7"
+    kotlin("jvm")
 }
 
 group = "id.ac.ui.cs.advprog"
@@ -43,6 +44,7 @@ dependencies {
     testImplementation("io.github.bonigarcia:selenium-jupiter:${seleniumJupiterVersion}")
     testImplementation("io.github.bonigarcia:webdrivermanager:${webdrivermanagerVersion}")
     testImplementation("org.junit.jupiter:junit-jupiter:${junitJupiterVersion}")
+    implementation(kotlin("stdlib-jdk8"))
 }
 
 tasks.withType<Test>().configureEach {
