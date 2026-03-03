@@ -12,18 +12,17 @@ import java.util.List;
 @Service
 public class CarServiceImpl implements CarService {
 
-    // DIP fix: depend on abstraction (CarRepositoryInterface), not concrete CarRepository
     @Autowired
     private CarRepositoryInterface carRepository;
 
     @Override
     public Car create(Car car) {
-        return carRepository.create(car);  // also fixed: was returning null
+        return carRepository.create(car);
     }
 
     @Override
     public List<Car> findAll() {
-        Iterator<Car> carIterator = carRepository.findAll();  // fixed: was findall()
+        Iterator<Car> carIterator = carRepository.findAll();
         List<Car> allCar = new ArrayList<>();
         carIterator.forEachRemaining(allCar::add);
         return allCar;
@@ -36,7 +35,7 @@ public class CarServiceImpl implements CarService {
 
     @Override
     public void update(String carId, Car car) {
-        carRepository.update(carId, car);  // fixed: was Update()
+        carRepository.update(carId, car);
     }
 
     @Override

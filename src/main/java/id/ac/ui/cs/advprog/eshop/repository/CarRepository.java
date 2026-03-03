@@ -23,7 +23,7 @@ public class CarRepository implements CarRepositoryInterface {
     }
 
     @Override
-    public Iterator<Car> findAll() {  // fixed: was findall() (inconsistent naming)
+    public Iterator<Car> findAll() {
         return carData.iterator();
     }
 
@@ -38,7 +38,7 @@ public class CarRepository implements CarRepositoryInterface {
     }
 
     @Override
-    public Car update(String id, Car updatedCar) {  // fixed: was Update() (naming convention)
+    public Car update(String id, Car updatedCar) {
         for (Car car : carData) {
             if (car.getCarId().equals(id)) {
                 car.setCarName(updatedCar.getCarName());
