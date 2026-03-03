@@ -1,6 +1,5 @@
 package id.ac.ui.cs.advprog.eshop.repository;
 
-
 import id.ac.ui.cs.advprog.eshop.model.Car;
 import org.springframework.stereotype.Repository;
 
@@ -10,33 +9,36 @@ import java.util.List;
 import java.util.UUID;
 
 @Repository
-public class CarRepository {
-    static int id = 0;
+public class CarRepository implements CarRepositoryInterface {
+
     private List<Car> carData = new ArrayList<>();
 
-    public Car create(Car car){
-        if(car.getCarId() == null){
-            UUID id = UUID.randomUUID();
-            car.setCarId(id.toString());
+    @Override
+    public Car create(Car car) {
+        if (car.getCarId() == null) {
+            car.setCarId(UUID.randomUUID().toString());
         }
         carData.add(car);
         return car;
     }
 
-    public Iterator<Car> findall(){
+    @Override
+    public Iterator<Car> findAll() {  // fixed: was findall() (inconsistent naming)
         return carData.iterator();
     }
 
-    public Car findById(String id){
-        for(Car car : carData){
-            if (car.getCarId().equals(id)){
+    @Override
+    public Car findById(String id) {
+        for (Car car : carData) {
+            if (car.getCarId().equals(id)) {
                 return car;
             }
         }
         return null;
     }
 
-    public Car Update(String id, Car updatedCar){
+    @Override
+    public Car update(String id, Car updatedCar) {  // fixed: was Update() (naming convention)
         for (Car car : carData) {
             if (car.getCarId().equals(id)) {
                 car.setCarName(updatedCar.getCarName());
@@ -48,9 +50,8 @@ public class CarRepository {
         return null;
     }
 
-    public void delete(String id){
-    carData.removeIf(car -> car.getCarId().equals(id));
+    @Override
+    public void delete(String id) {
+        carData.removeIf(car -> car.getCarId().equals(id));
     }
-
-
 }
