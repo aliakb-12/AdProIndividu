@@ -1,12 +1,16 @@
 package id.ac.ui.cs.advprog.eshop.service;
 
+import id.ac.ui.cs.advprog.eshop.model.CashOnDeliveryPayment;
 import id.ac.ui.cs.advprog.eshop.model.Order;
 import id.ac.ui.cs.advprog.eshop.model.Payment;
+import id.ac.ui.cs.advprog.eshop.model.VoucherPayment;
 import id.ac.ui.cs.advprog.eshop.repository.PaymentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 @Service
 public class PaymentServiceImpl implements PaymentService {
@@ -15,25 +19,19 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     public Payment addPayment(Order order, String method, Map<String, String> paymentData) {
-        String status = "REJECTED";
+        Payment payment;
+        String paymentId = UUID.randomUUID().toString();
+
         if ("VOUCHER".equals(method)) {
-            status = validateVoucher(paymentData.get("voucherCode"));
+            payment = new VoucherPayment(paymentId, order, paymentData);
         } else if ("CASH_ON_DELIVERY".equals(method)) {
-            status = validateCOD(paymentData);
+            payment = new CashOnDeliveryPayment(paymentId, order, paymentData);
+        } else {
+            throw new IllegalArgumentException("Unsupported payment method");
         }
-        Payment payment = new Payment(UUID.randomUUID().toString(), order, method, paymentData);
-        return setStatus(payment, status);
-    }
 
-    private String validateVoucher(String code) {
-        if (code == null || code.length() != 16 || !code.startsWith("ESHOP")) return "REJECTED";
-        return (code.chars().filter(Character::isDigit).count() == 8) ? "SUCCESS" : "REJECTED";
-    }
-
-    private String validateCOD(Map<String, String> data) {
-        String addr = data.get("address");
-        String fee = data.get("deliveryFee");
-        return (addr != null && !addr.isBlank() && fee != null && !fee.isBlank()) ? "SUCCESS" : "REJECTED";
+        // The subclass constructor automatically set the status upon validation, so we just sync it to the Order
+        return setStatus(payment, payment.getStatus());
     }
 
     @Override
