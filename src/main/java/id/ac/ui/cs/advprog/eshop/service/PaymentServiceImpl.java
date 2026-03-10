@@ -16,23 +16,24 @@ public class PaymentServiceImpl implements PaymentService {
     @Override
     public Payment addPayment(Order order, String method, Map<String, String> paymentData) {
         String status = "REJECTED";
-
-        if (method.equals("VOUCHER")) {
-            String code = paymentData.get("voucherCode");
-            if (code != null && code.length() == 16 && code.startsWith("ESHOP")) {
-                long digits = code.chars().filter(Character::isDigit).count();
-                if (digits == 8) status = "SUCCESS";
-            }
-        } else if (method.equals("CASH_ON_DELIVERY")) {
-            String addr = paymentData.get("address");
-            String fee = paymentData.get("deliveryFee");
-            if (addr != null && !addr.isBlank() && fee != null && !fee.isBlank()) {
-                status = "SUCCESS";
-            }
+        if ("VOUCHER".equals(method)) {
+            status = validateVoucher(paymentData.get("voucherCode"));
+        } else if ("CASH_ON_DELIVERY".equals(method)) {
+            status = validateCOD(paymentData);
         }
-
         Payment payment = new Payment(UUID.randomUUID().toString(), order, method, paymentData);
         return setStatus(payment, status);
+    }
+
+    private String validateVoucher(String code) {
+        if (code == null || code.length() != 16 || !code.startsWith("ESHOP")) return "REJECTED";
+        return (code.chars().filter(Character::isDigit).count() == 8) ? "SUCCESS" : "REJECTED";
+    }
+
+    private String validateCOD(Map<String, String> data) {
+        String addr = data.get("address");
+        String fee = data.get("deliveryFee");
+        return (addr != null && !addr.isBlank() && fee != null && !fee.isBlank()) ? "SUCCESS" : "REJECTED";
     }
 
     @Override
