@@ -1,12 +1,32 @@
-***REFLECTION 1***
-- 
-- **Clean code**: Membuat setiap file melakukan hal yang tersendiri. Seperti Product model menghanlde struktur data, ProductRepository menghandle data-datanya, dll. Serta juga menggunakan nama-nama yang jelas untuk menamakan function seperti findByID, findAll, dll.
-  
-- **Secure coding and mistakes from source code**: Ketika membuat product pertama kali kita membuat ID dengan String. Tetapi saya merasa bahwa ini bukanlah hal yang bagus untuk diimplementasi dengan alasan security dan kesimpelan kode kita. Masalah keamanan utama yang muncul adalah kerentanan terhadap serangan enumerasi, di mana pengguna lain dapat dengan mudah menebak-nebak ID dari produk yang ada dalam sistem. Contohnya, rencana awal saya adalah membuat ID produk mengikuti pola sequential seperti "ProductId1", "ProductId2", "ProductId3", dan seterusnya. Pola seperti ini jelas sangat mudah ditebak oleh pengguna lainnya. Mereka hanya harus mencoba-coba membuka url seperti /product/edit/ProductId1, /product/edit/ProductId2, dan seterusnya untuk mengakses produk yang mungkin bukan miliknya. Untuk mengatasi masalah ini, saya mengganti id dari String menjadi UUID yang akan meningkatkan keamanan dan menyederhanakan kode karena generasi ID dapat dilakukan secara otomatis menggunakan UUID.randomUUID() tanpa perlu logic tambahan.
+**Refleksi terhadap kegunaan TDD (Percival, 2017)**
+
+Menurut prinsip yang dijelaskan oleh Percival, kegunaan dari alur TDD dapat dilihat dari apakah TDD tersebut dapat berfungsi sebagai safety net dan juga sebagai alat untuk membantu desain sistem, bukan hanya sekadar tugas tambahan saat coding.
+
+Dalam praktiknya, alur TDD ini cukup membantu karena memaksa kita untuk mendefinisikan aturan dari fitur seperti Voucher dan COD sebelum menulis logika utama dari program. Dengan adanya test seperti testAddPaymentVoucherSuccess dan testAddPaymentCODRejectedEmptyAddress, kita tidak perlu menebak apakah implementasi yang dibuat sudah benar atau belum, karena hasil test yang pass langsung memberikan konfirmasi bahwa kode sudah bekerja sesuai dengan yang diharapkan.
+
+Selain itu, menulis test terlebih dahulu juga berfungsi seperti spesifikasi fungsional. Dari test tersebut menjadi jelas bahwa objek Payment harus memiliki relasi dengan Order, dan bahwa paymentData berbentuk Map harus memiliki key tertentu seperti voucherCode.
+
+Test juga sangat membantu saat melakukan tahap refactor. Ketika validasi dipindahkan ke method private seperti validateVoucher(), test yang sudah ada memastikan bahwa perubahan tersebut tidak merusak aturan yang sudah dibuat sebelumnya, misalnya aturan bahwa voucher harus terdiri dari 8 digit.
+
+Hal yang bisa diperbaiki ke depannya adalah dari sisi granularitas test. Pada percobaan ini, beberapa test masih mencakup satu fungsi secara keseluruhan. Ke depannya, test bisa dibuat lebih kecil dan spesifik, misalnya membuat test terpisah untuk mengecek panjang voucher saja, lalu test lain untuk mengecek prefix voucher. Dengan begitu tahap Red dalam TDD bisa menjadi lebih jelas dan spesifik.
 
 
-***REFLECTION 2***
--
-- **How many unit tests should be made in a class?** Tidak ada minimal dan maksimal untuk berapa unit test yang harus dibikin dalam 1 _class_. Dikarenakan unit-test bukanlah tentang seberapa banyak test yang kita bikin. Melainkan tentang seberapa banayk program yang kita cover dengan test kita ini.
-- **How to make sure that our unit tests are enough to verify our program?** kita bisa melakukan coverage tests, dengan sebisa mungkin mendekati 100%. Dan juga kita bisa mencoba manual dengan mencoba membuka program yang kita bikin dan mencoba semua edge case yang bisa kita pikirkan. Selain itu kita juga bisa meminta user lain untuk mencoba program kita dikarekanakan terkadang perspektif kita sendiri akan berbeda dengan yang laiinnya. 
-- **If you have 100% code coverage, does that mean your code has no bugs or errors?** Tidak, 100% code coverage hanya merupakan indikator bahwa semua baris kode telah dieksekusi oleh test, bukan jaminan bahwa kode tersebut bebas dari bug atau error. Code coverage mengukur seberapa banyak kode yang "tersentuh" oleh test, tetapi tidak mengukur apakah logika di dalam kode tersebut bekerja dengan benar. Selain itu juga, 100% code coverage tidak menjamin bahwa semua skenario edge case telah diuji, seperti input null, nilai negatif, atau kondisi boundary lainnya. Kualitas test jauh lebih penting daripada kuantitas coverage test.
+---
+**Refleksi terhadap prinsip F.I.R.S.T.**
+
+Berdasarkan evaluasi terhadap PaymentServiceTest, sebagian besar test yang dibuat sudah mengikuti prinsip F.I.R.S.T.:
+
+Fast
+Test berjalan dengan cepat karena menggunakan @Mock untuk PaymentRepository, sehingga tidak perlu melakukan operasi database yang lambat. Test dapat dijalankan hanya dalam waktu milidetik.
+
+Independent
+Setiap test bersifat independen karena menggunakan method @BeforeEach untuk membuat objek Order dan PaymentService yang baru. Dengan demikian, tidak ada test yang bergantung pada hasil dari test sebelumnya.
+
+Repeatable
+Test dapat dijalankan berulang kali dengan hasil yang sama karena tidak bergantung pada faktor eksternal seperti waktu sistem atau koneksi jaringan.
+
+Self-Validating
+Test menggunakan assertion seperti assertEquals dan assertNull, sehingga hasil test langsung berupa pass atau fail. Tidak diperlukan pengecekan log secara manual untuk mengetahui hasilnya.
+
+Timely
+Test ditulis sebelum implementasi kode, sesuai dengan fase RED dalam TDD. Hal ini memastikan bahwa kode yang dibuat sejak awal sudah dirancang agar mudah untuk diuji.
